@@ -1,7 +1,7 @@
 import {useRoute} from '@react-navigation/native';
 import {Box, KeyboardAvoidingView, Text} from 'native-base';
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Platform} from 'react-native';
 import {SectionHeader} from '../../components/molecules/SectionHeader';
 import {useAppSelector} from '../../hooks';
 import {useCardLayout} from '../../hooks/dimension';
@@ -14,7 +14,9 @@ export function DetailScreen() {
   const {column} = useCardLayout();
 
   return (
-    <KeyboardAvoidingView flex={1} behavior="padding">
+    <KeyboardAvoidingView
+      flex={1}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <Box flex={1} px={4}>
         <SectionHeader catId={route.name} />
 

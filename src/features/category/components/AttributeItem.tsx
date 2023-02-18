@@ -60,7 +60,7 @@ export const AttributeItem = React.memo(({field, catId}: Props) => {
         label={field.attributeType.label}
       />
 
-      <ActionIcon size={28} onPress={handleDeleteField} name="trash" />
+      <ActionIcon onPress={handleDeleteField} />
     </HStack>
   );
 });

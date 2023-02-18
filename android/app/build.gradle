@@ -1,11 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 
-project.ext.vectoricons = [
-    iconFontNames: [ 'FontAwesome.ttf'] 
-]
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-
 import com.android.build.OutputFile
 
 /**
@@ -170,8 +165,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-
-    implementation project(':react-native-vector-icons')
 }
 
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)

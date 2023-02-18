@@ -15,7 +15,7 @@ export function NoCategory() {
   };
 
   return (
-    <Center flex={1}>
+    <Center mt={10} flex={1}>
       <Text>No category found</Text>
 
       <Button

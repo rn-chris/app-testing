@@ -1,6 +1,7 @@
+import {KeyboardAvoidingView} from 'native-base';
 import {Box, Text} from 'native-base';
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Platform} from 'react-native';
 import {useAppSelector} from '../../hooks';
 import {selectCategoryList} from '../../redux/categorySlice';
 import {NoCategory} from '../category/components/NoCategory';
@@ -10,15 +11,17 @@ export function DashboardScreen() {
   const categories = useAppSelector(selectCategoryList);
 
   return (
-    <Box flex={1} mx={4}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      flex={1}
+      mx={4}>
       <FlatList
-        contentContainerStyle={{flex: 1}}
         ListEmptyComponent={<NoCategory />}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => <DashboardItem catId={item.id} />}
         keyExtractor={item => item.id}
         data={categories}
       />
-    </Box>
+    </KeyboardAvoidingView>
   );
 }

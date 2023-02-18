@@ -1,6 +1,6 @@
 import {Box, Text} from 'native-base';
 import React from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, View} from 'react-native';
 import {SectionHeader} from '../../../components/molecules/SectionHeader';
 import {useAppSelector} from '../../../hooks';
 import {useCardLayout} from '../../../hooks/dimension';
@@ -17,7 +17,7 @@ export const DashboardItem = ({catId}: Props) => {
   const data = useAppSelector(state => searchDataByCatId(state, catId));
 
   return (
-    <Box>
+    <View>
       <SectionHeader catId={catId} />
 
       <FlatList
@@ -34,6 +34,6 @@ export const DashboardItem = ({catId}: Props) => {
         )}
         keyExtractor={item => item.id}
       />
-    </Box>
+    </View>
   );
 };
