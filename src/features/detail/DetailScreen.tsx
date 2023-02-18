@@ -1,35 +1,30 @@
 import {useRoute} from '@react-navigation/native';
 import {Box, KeyboardAvoidingView, Text} from 'native-base';
-import React, {useMemo} from 'react';
+import React from 'react';
 import {FlatList} from 'react-native';
 import {SectionHeader} from '../../components/molecules/SectionHeader';
 import {useAppSelector} from '../../hooks';
 import {useCardLayout} from '../../hooks/dimension';
-import {selectCategoryList} from '../../redux/categorySlice';
-import {Category} from '../../types/models';
+import {searchDataByCatId} from '../../redux/categorySlice';
 import {DetailItem} from './components/DetailItem';
 
 export function DetailScreen() {
-  const categories = useAppSelector(selectCategoryList);
   const route = useRoute();
+  const data = useAppSelector(state => searchDataByCatId(state, route.name));
   const {column} = useCardLayout();
-
-  const category = useMemo(() => {
-    return categories.find(it => it.id === route.name) as Category;
-  }, [categories, route]);
 
   return (
     <KeyboardAvoidingView flex={1} behavior="padding">
       <Box flex={1} px={4}>
-        <SectionHeader category={category} />
+        <SectionHeader catId={route.name} />
 
         <FlatList
           numColumns={column}
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => (
-            <DetailItem index={index} category={category} fieldValue={item} />
+            <DetailItem index={index} catId={route.name} fieldValue={item} />
           )}
-          data={category.data}
+          data={data}
           keyExtractor={item => item.id}
           ListEmptyComponent={
             <Text mt={4} alignSelf={'center'}>

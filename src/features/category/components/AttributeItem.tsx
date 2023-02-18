@@ -2,58 +2,48 @@ import {HStack, Input} from 'native-base';
 import React from 'react';
 import {ActionIcon} from '../../../components';
 import {useAppDispatch} from '../../../hooks';
-import {updateCategory} from '../../../redux/categorySlice';
-import {AttributeType, Category, Field} from '../../../types/models';
+import {changeAttribute, deleteAttribute} from '../../../redux/categorySlice';
+import {AttributeType, Field} from '../../../types/models';
 
 import {AttributePicker} from './AttributePicker';
 
 interface Props {
   field: Field;
-  category?: Category;
+  catId: string;
 }
-export function AttributeItem({field, category}: Props) {
+export const AttributeItem = React.memo(({field, catId}: Props) => {
+  console.log('AttributeItem');
   const dispatch = useAppDispatch();
 
   const handleAttributeChange = (attribute: AttributeType) => () => {
-    if (!category) return;
-
-    const fields = [...category.fields];
-
     dispatch(
-      updateCategory({
-        ...category,
-        fields: fields.map(it =>
-          it.id === field.id ? {...it, attributeType: attribute} : it,
-        ),
+      changeAttribute({
+        catId,
+        data: {
+          ...field,
+          attributeType: attribute,
+        },
       }),
     );
   };
 
   const handleDeleteField = () => {
-    if (!category) return;
-
-    const fields = category.fields.filter(it => it.id !== field.id);
     dispatch(
-      updateCategory({
-        ...category,
-        fields,
-        fieldIdMarkAsTitle:
-          fields.length > 0 ? category.fieldIdMarkAsTitle : undefined,
+      deleteAttribute({
+        catId,
+        fieldId: field.id,
       }),
     );
   };
 
   const handleChangeFieldLabel = (text: string) => {
-    if (!category) return;
-
-    const fields = [...category.fields];
-
     dispatch(
-      updateCategory({
-        ...category,
-        fields: fields.map(it =>
-          it.id === field.id ? {...it, label: text} : it,
-        ),
+      changeAttribute({
+        catId,
+        data: {
+          ...field,
+          label: text,
+        },
       }),
     );
   };
@@ -74,4 +64,4 @@ export function AttributeItem({field, category}: Props) {
       <ActionIcon onPress={handleDeleteField} name="trash" />
     </HStack>
   );
-}
+});

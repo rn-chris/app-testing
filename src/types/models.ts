@@ -3,7 +3,6 @@ export interface Category {
   title?: string;
   fields: Field[];
   fieldIdMarkAsTitle?: string;
-  data: FieldValues[];
 }
 
 export interface FieldValues {

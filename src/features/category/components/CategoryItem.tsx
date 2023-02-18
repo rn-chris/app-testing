@@ -14,7 +14,6 @@ interface Props {
   index: number;
 }
 export const CategoryItem = React.memo(({item, index}: Props) => {
-  console.log('CategoryItem', index);
   const dispatch = useAppDispatch();
   const {isTablet, cardWidth} = useCardLayout();
 
@@ -58,7 +57,7 @@ export const CategoryItem = React.memo(({item, index}: Props) => {
       />
 
       {item.fields.map(field => (
-        <AttributeItem category={item} key={field.id} field={field} />
+        <AttributeItem catId={item.id} key={field.id} field={field} />
       ))}
 
       <TitleField category={item} />

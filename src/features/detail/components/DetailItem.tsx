@@ -14,42 +14,46 @@ import React, {useMemo, useState} from 'react';
 import DatePicker from 'react-native-date-picker';
 import {DATE_FORMAT} from '../../../consts/Constants';
 
-import {useAppDispatch} from '../../../hooks';
+import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {GAP, useCardLayout} from '../../../hooks/dimension';
-import {updateCategory} from '../../../redux/categorySlice';
+import {
+  deleteCategory,
+  deleteFieldData,
+  searchCategoryById,
+  updateCategory,
+  updateFieldData,
+} from '../../../redux/categorySlice';
 import {Category, Field, FieldValues} from '../../../types/models';
 
 interface Props {
   fieldValue: FieldValues;
-  category: Category;
+  catId: string;
   index: number;
 }
 
-export const DetailItem = React.memo(({fieldValue, category, index}: Props) => {
-  console.log('DetailItem', index);
+export const DetailItem = React.memo(({fieldValue, catId, index}: Props) => {
   const {cardWidth, isTablet} = useCardLayout(16);
 
   const dispatch = useAppDispatch();
+
+  const category = useAppSelector(state =>
+    searchCategoryById(state, catId),
+  ) as Category;
+
   const [fieldIdSelectedByPicker, setOpenDatePicker] = useState<string>();
-  const {fieldIdMarkAsTitle = '', fields} = useMemo(() => category, [category]);
 
   const handleOpenDatePicker = (fieldId: string) => () => {
     setOpenDatePicker(fieldId);
   };
 
   const handleRemoveDetail = () => {
-    const data = category.data.filter(it => it.id !== fieldValue.id);
-    dispatch(updateCategory({...category, data}));
+    dispatch(deleteFieldData({categoryId: catId, fieldId: fieldValue.id}));
   };
 
-  const update = (fieldId: string, value: string) => {
-    const data = category.data.map(it => {
-      if (it.id === fieldValue.id) {
-        return {...it, value: {...it.value, [fieldId]: value}};
-      }
-      return it;
-    });
-    dispatch(updateCategory({...category, data}));
+  const update = (value: Record<string, string>) => {
+    dispatch(
+      updateFieldData({categoryId: catId, fieldId: fieldValue.id, value}),
+    );
   };
 
   const renderValueByType = (field: Field) => {
@@ -63,7 +67,7 @@ export const DetailItem = React.memo(({fieldValue, category, index}: Props) => {
             keyboardType={type === 'number' ? 'numeric' : 'default'}
             value={value}
             onChangeText={text => {
-              update(field.id, text);
+              update({[field.id]: text});
             }}
           />
         </>
@@ -76,7 +80,7 @@ export const DetailItem = React.memo(({fieldValue, category, index}: Props) => {
           <Switch
             isChecked={value === 'true'}
             onToggle={value => {
-              update(field.id, value.toString());
+              update({[field.id]: value.toString()});
             }}
           />
           <Text>{field.label}</Text>
@@ -107,11 +111,11 @@ export const DetailItem = React.memo(({fieldValue, category, index}: Props) => {
       mb={4}
       p={4}>
       <Heading mb={3} fontSize={'md'}>
-        {fieldValue.value[fieldIdMarkAsTitle] || 'Unnamed Field'}
+        {fieldValue.value[category.fieldIdMarkAsTitle || ''] || 'Unnamed Field'}
       </Heading>
 
       <VStack space={3}>
-        {fields.map(field => {
+        {category.fields.map(field => {
           return <Box key={field.id}>{renderValueByType(field)}</Box>;
         })}
       </VStack>
@@ -130,10 +134,11 @@ export const DetailItem = React.memo(({fieldValue, category, index}: Props) => {
         date={new Date()}
         open={Boolean(fieldIdSelectedByPicker)}
         onConfirm={date => {
-          update(
-            fieldIdSelectedByPicker as string,
-            dayjs(date).format(DATE_FORMAT),
-          );
+          update({
+            [fieldIdSelectedByPicker as string]:
+              dayjs(date).format(DATE_FORMAT),
+          });
+
           setOpenDatePicker(undefined);
         }}
         onCancel={() => {

@@ -1,32 +1,31 @@
 import {Button, Heading, HStack} from 'native-base';
 import React from 'react';
-import {useAppDispatch} from '../../hooks';
-import {updateCategory} from '../../redux/categorySlice';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {
+  addNewFieldData,
+  searchCategoryById,
+  updateCategory,
+} from '../../redux/categorySlice';
 import {Category, FieldValues} from '../../types/models';
 import {generateUUID} from '../../utils/utils';
 
 interface Props {
-  category: Category;
+  catId: string;
 }
-export function SectionHeader({category}: Props) {
+export const SectionHeader = React.memo(({catId}: Props) => {
+  const category = useAppSelector(state => searchCategoryById(state, catId));
+
   const dispatch = useAppDispatch();
 
   const handleAddNewItem = () => {
-    const data = [...category.data];
-    const newItem: FieldValues = {
-      id: generateUUID(),
-      value: {},
-    };
-    data.push(newItem);
-
-    dispatch(updateCategory({...category, data}));
+    dispatch(addNewFieldData({catId}));
   };
 
   return (
     <HStack my={4} alignItems={'center'} justifyContent={'space-between'}>
-      <Heading>{category.title}</Heading>
+      <Heading>{category?.title}</Heading>
 
       <Button onPress={handleAddNewItem}>Add New Item</Button>
     </HStack>
   );
-}
+});
