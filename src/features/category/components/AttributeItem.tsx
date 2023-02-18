@@ -12,7 +12,6 @@ interface Props {
   catId: string;
 }
 export const AttributeItem = React.memo(({field, catId}: Props) => {
-  console.log('AttributeItem');
   const dispatch = useAppDispatch();
 
   const handleAttributeChange = (attribute: AttributeType) => () => {
@@ -49,7 +48,7 @@ export const AttributeItem = React.memo(({field, catId}: Props) => {
   };
 
   return (
-    <HStack mt={2} space={4}>
+    <HStack alignItems={'center'} mt={2} space={3}>
       <Input
         onChangeText={handleChangeFieldLabel}
         value={field.label}
@@ -61,7 +60,7 @@ export const AttributeItem = React.memo(({field, catId}: Props) => {
         label={field.attributeType.label}
       />
 
-      <ActionIcon onPress={handleDeleteField} name="trash" />
+      <ActionIcon size={28} onPress={handleDeleteField} name="trash" />
     </HStack>
   );
 });

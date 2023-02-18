@@ -39,6 +39,12 @@ export const theme = extendTheme({
       },
     },
 
+    Input: {
+      baseStyle: {
+        height: '40px',
+      },
+    },
+
     Text: {
       baseStyle: {
         _light: {
@@ -68,14 +74,14 @@ export const theme = extendTheme({
           },
         },
         md: {
-            height: '32px',
-            py: 1,
-            px: 4,
-            _text: {
-              fontSize: '14px',
-              color: 'white',
-            },
+          height: '40px',
+          py: 1,
+          px: 4,
+          _text: {
+            fontSize: '14px',
+            color: 'white',
           },
+        },
       },
       variants: {
         link: {

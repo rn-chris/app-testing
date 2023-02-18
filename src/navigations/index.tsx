@@ -9,9 +9,9 @@ import {DetailScreen} from '../features/detail/DetailScreen';
 import {useAppSelector} from '../hooks';
 import {selectCategoryList} from '../redux/categorySlice';
 
-type AppParamList = {
+export type AppParamList = {
   Dashboard: undefined;
-  DetailScreen: undefined;
+  Category: undefined;
 };
 
 export type ScreenProps<T extends keyof AppParamList> = DrawerScreenProps<
@@ -24,7 +24,7 @@ const Drawer = createDrawerNavigator();
 function RootNavigator() {
   const categories = useAppSelector(selectCategoryList);
   return (
-    <Drawer.Navigator initialRouteName="Category">
+    <Drawer.Navigator>
       <Drawer.Screen name="Dashboard" component={DashboardScreen} />
 
       {categories.map(category => (

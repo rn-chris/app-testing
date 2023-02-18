@@ -3,19 +3,17 @@ import React from 'react';
 import {FlatList} from 'react-native';
 import {useAppSelector} from '../../hooks';
 import {selectCategoryList} from '../../redux/categorySlice';
+import {NoCategory} from '../category/components/NoCategory';
 import {DashboardItem} from './components/DashboardItem';
 
 export function DashboardScreen() {
   const categories = useAppSelector(selectCategoryList);
 
   return (
-    <Box mx={4}>
+    <Box flex={1} mx={4}>
       <FlatList
-        ListEmptyComponent={
-          <Text mt={4} alignSelf={'center'}>
-            No items to display
-          </Text>
-        }
+        contentContainerStyle={{flex: 1}}
+        ListEmptyComponent={<NoCategory />}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => <DashboardItem catId={item.id} />}
         keyExtractor={item => item.id}

@@ -1,13 +1,7 @@
 import {Button, Heading, HStack} from 'native-base';
 import React from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {
-  addNewFieldData,
-  searchCategoryById,
-  updateCategory,
-} from '../../redux/categorySlice';
-import {Category, FieldValues} from '../../types/models';
-import {generateUUID} from '../../utils/utils';
+import {addNewFieldData, searchCategoryById} from '../../redux/categorySlice';
 
 interface Props {
   catId: string;

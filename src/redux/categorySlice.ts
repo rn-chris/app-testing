@@ -37,6 +37,7 @@ export const categorySlice = createSlice({
       };
       state.categories.push(newCategory);
       state.data = {
+        ...state.data,
         [newCategory.id]: [],
       };
     },
@@ -106,7 +107,7 @@ export const categorySlice = createSlice({
     },
 
     addNewFieldData: (state, {payload}: PayloadAction<{catId: string}>) => {
-      state.data[payload.catId].push({id: generateUUID(), value: {}});
+      state.data[payload.catId]?.push({id: generateUUID(), value: {}});
     },
 
     updateFieldData: (
@@ -141,7 +142,7 @@ export const categorySlice = createSlice({
 
       const data = state.data[categoryId].filter(it => it.id !== fieldId);
 
-      state.data = {[categoryId]: data};
+      state.data = {...state.data, [categoryId]: data};
     },
   },
 });
@@ -150,9 +151,11 @@ export const {
   addNewCategory,
   deleteCategory,
   updateCategory,
+
   addNewFieldData,
   updateFieldData,
   deleteFieldData,
+
   deleteAttribute,
   changeAttribute,
 } = categorySlice.actions;
