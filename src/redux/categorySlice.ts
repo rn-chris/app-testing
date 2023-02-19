@@ -128,7 +128,7 @@ export const categorySlice = createSlice({
         return it;
       });
 
-      state.data = {[categoryId]: data};
+      state.data = {...state.data, [categoryId]: data};
     },
 
     deleteFieldData: (
